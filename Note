@@ -1,0 +1,144 @@
+== Factory Pattern :
+	+) Simple Factory Pattern
+	+) Factory Method Pattern
+	+) Abstract Factory Pattern
+	
+Ví dụ thực tế: trong vận tải.
+	1. Ban đầu = xe tải
+	2. Sau phát sinh vận tải = tàu thủy -> nối tiếp là = hàng không.
+	-> Giải quyết  ???
+	
+	*) ServiceLogistics	: đây sẽ là core	 -	 với phương thức 'getTransport' : lấy ra loại phương thức vận chuyển phù hợp
+	
+SOLID: tưởng tượng ra thực thể (thuộc tính và hành động)
+	-> Suy nghĩ và chia tách sao cho mỗi thực thể sẽ chịu những trách nghiệm cụ thể (trách nghiệm hành động)
+	-> Từ đó ta sẽ quản lí code hợp lí nhất.
+		+) Nếu hành động không phải trách nghiệm của thực thể hiện tại.
+		-> Thì tạo ra 1 thực thể mới chứa hành động đó và chúng ta sẽ gọi thực thể đó ra để dùng hành động đó.
+
+
+1. Simple Factory Pattern
+	- Ưu điểm: tạo 1 thể hiện của 1 class
+	- Nhược điểm: vì nó tập trung vào tính logic -> để tạo ra tất cả các sản phẩm.
+		=> Trách nhiệm của 1 class, hay 1 function rất nặng nề. -> khó mở rộng code đc.
+	(ví dụ thêm 1 phương thức vận chuyển khác như tàu thủy, ...)
+		
+-> Khắc phục nhược điểm khó mở rộng code của 'simple factory' dùng khái niệm 'factory method'
+
+2. Factory Method Pattern
+	- Đảm bảo đc instance 'ServiceLogistics' ko bị thay đổi - khi gọi phương thức trong nó.
+
+
+
+== Strategy Pattern :	Mọi con đường dẫn tới thành Rome.
+	- Nhưng tới con đường đó thì trải qua nhiều giai đoạn, mỗi giai đoạn là khác nhau (như chọn 1 loại phương thức khác)
+
+
+	- mã code: giả dụ có quá nhiều trường hợp xảy ra	=> sử dụng if..else liên tục quá nhiều.
+		=> Dẫn đến đoạn mã khó kiểm soát. (và 'OriginalPrice' mất tính 'duy nhất' trong nguyên tắc SOLID)
+
+
+
+
+=> Ý tưởng : của 'Factory Pattern' và 'Strategy Pattern' là ko để mã nguồn dạng if...else hay swich...case kéo dài và return  trả về 1 cách thủ công (dài dòng).
+
+
+
+Dùng trong trường hợp: có nhiều thể loại (nhiều biến thể của Object)
+	- tách nhỏ, dễ kiểm soát code.
+	
+	
+	-> Factory : như áp dụng tính kế thừa trong OOP.
+	   Strategy : giữ cho cấu trúc code là tính duy nhất.
+	   		(không cần phải chèn thêm / hay thay đổi trong function => tạo ra cơ chế chung khi khai báo thì truyền thêm tham số)
+
+
+
+
+
+
+=== Observer Pattern ===
+	- Cơ chế sub - unSub (đăng ký - hủy đk)
+	+) sub: đăng kí - 'Object Sub' sẽ nhận đc tín hiệu, khi 'Object emit' thực hiện 1 action.
+	+) unSub: hủy đăng kí - 'Object Sub' sẽ không nhận đc tín hiệu nữa.
+	
+	*) Ứng dụng Observer trong mô hình 'Pull/Push' - ở tính năng 'new feed' của app 'facebook' (mạng xã hội)
+		Bài toán đặt ra : khi 1 'Đối tượng A' thực hiệu "follow" 1 'Đối tượng B' thì:
+			Mỗi khi 'Đối tượng B' post 1 bài viết thì 'Đối tượng A' sẽ nhận được bài viết mà 'Đối tượng B' vừa post lên.
+			
+	-> Có 2 cách để xử lí bài toán này là áp dụng: 'Pull Pattern' hoặc 'Push Pattern'
+	
+	- Pull Pattern:
+		+) Bước 1: B follow A. -> Có liên kết A và B.
+		+) Bước 2: Khi B vào app -> 'new feed' sẽ hiện lên.
+			+) B sẽ request đến A (vì trước đó B đã follow A).
+			+) A sẽ response cho B tất cả các bài post mới nhất.
+	=> Ưu/Nhược:
+		+) Ưu điểm: khi A post thì chỉ cần save bài post vào DB.
+		+) Nhược điểm: nếu có N users thì kéo (pull) N request về. (nghĩa là B follow 'N người dùng')
+			-> Thời ra chờ đợi để render ra 'new feed' thì lâu.
+
+	
+	- Push Pattern:	(ứng dụng Observer Pattern)
+		+) Bước 1: B follow A -> Có liên kết A và B.
+			+) Mỗi khi A post bài viết -> thì hệ thống sẽ tự động tạo 1 bảng ghi đến với những người đã đăng kí (hay là có liên kết)
+				-> Giống cơ chế webhook.
+		+) Bước 2: Khi B vào app -> 'new feed' sẽ hiện lên. (tự động nhìn thấy bài viết của A luôn)
+		
+	=> Ưu/Nhược điểm:
+		+) Ưu điểm: B chỉ cần truy cập vào data 'new feed' trong db -> nhanh, gọn lẹ.
+		+) Nhược điểm: Lãng phí bộ nhớ (db - 1 triệu người follow thì 1 triệu bảng ghi) và tốc độ nhận tin nhắn giữa các user ko đồng đều (nhanh hoặc chậm)
+		
+		
+		
+		
+=== Face Pattern ===
+	*) Đằng sau hệ thống phức tạp là 1 giao diện dễ dùng cho users.
+		
+	Giả sử: module tính tiền cho shoppe.
+		+) check sp có đc giảm giá hay ko
+		+) tính thuế VAT
+		+) phí shipping.
+		
+	=> 1 tính năng như tính tiền: trông đơn giản nhưng bao gồm nhiều tính năng con
+		=> 1 module lớn chia thành nhiều module con, mỗi module con sẽ đảm nhận 1 tránh nhiệm riêng.
+		
+		
+		
+		
+	
+=== Proxy Pattern ===
+	- là 1 lớp trung gian, được ủy quyền để điều hướng request tới endpoint phù hợp. 
+	Ví dụ trong thực tế: ATM
+		- Ngân hàng ủy quyền cho ATM (Proxy) chịu trách nhiệm tương tác trực tiếp với khách hàng.
+			+) ATM nhận thông tin -> rồi đưa thông tin về ngân hàng xử lí.
+			
+	Rest API: nếu ko có Proxy -> để lộ endpoint -> nguy cơ dễ bị tấn công.
+		=> Cần có Proxy làm trung gian trong việc tiệp nhận request và trả về response.
+		
+	Thực hành: Sếp - Thư kí - nhân viên.
+	
+	Ứng dụng: Proxy Pattern áp dụng vào tạo các 'middleware' cho project.
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+*) Pattern - phổ biến:
+	- Singleton Pattern
+	- Factory Pattern
+	- Facade Pattern
+	- Proxy Pattern
+	- Observer Pattern
+	- Strategy Pattern
+	- Adapter Pattern
+	- Composite Pattern
+	- Command Pattern
+	- 
+
